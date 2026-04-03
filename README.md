@@ -91,14 +91,19 @@ r-paper-formatter/
 
 ---
 
----
-
 ## 👨‍💻 Developer
 
 **Sanjyot Dhamal**
 
-[![Portfolio](https://img.shields.io/badge/Portfolio-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://sanjyot-portfolio.netlify.app)
-[![GitHub](https://img.shields.io/badge/GitHub-sanjyotdhamal-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sanjyotdhamal)
+<div align="center">
+
+[![Portfolio](https://img.shields.io/badge/Portfolio-000?style=flat&logo=netlify)](https://sanjyot-portfolio.netlify.app)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin)](https://www.linkedin.com/in/sanjyot-dhamal-2b6205289/)
+[![GitHub](https://img.shields.io/badge/GitHub-000?style=flat&logo=github)](https://github.com/sanjyotdhamal)
+
+*"build, break, learn, repeat."*
+
+</div>
 
 ---
 
