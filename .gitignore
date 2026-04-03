@@ -1,0 +1,23 @@
+# Environment variables - NEVER push these!
+.env
+*.env
+.env.local
+.env.production
+
+# Python
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+*.pyc
+*.pyo
+
+# Node
+frontend/node_modules/
+frontend/build/
+
+# Output files
+backend/outputs/
+
+# OS files
+.DS_Store
+Thumbs.db
