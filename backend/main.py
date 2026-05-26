@@ -8,10 +8,10 @@ from ai.content_analyzer import analyze_content
 from output.docx_generator import generate_docx
 import uuid
 from datetime import datetime
+import traceback
 
 app = FastAPI(title="R-Paper Formatter API")
 
-# Allow React frontend to talk to backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -41,11 +41,11 @@ async def format_paper(
     try:
         # Save job to MongoDB
         job = FormattingJob(
-            job_id=job_id,
-            original_filename=file.filename,
-            format_type=format_type,
-            status=JobStatus.PROCESSING
-        )
+    job_id=job_id,
+    original_filename=file.filename,
+    format_type=format_type.lower(),
+    status=JobStatus.PROCESSING
+)
         await jobs_collection.insert_one(job.dict())
 
         # Step 1 — Extract text from PDF
@@ -66,7 +66,7 @@ async def format_paper(
         await papers_collection.insert_one(paper.dict())
 
         # Step 3 — Generate formatted DOCX
-        output_path = generate_docx(structured, format_type, job_id)
+        output_path = generate_docx(structured, format_type.lower(), job_id)
 
         # Update job status
         await jobs_collection.update_one(
@@ -85,7 +85,8 @@ async def format_paper(
         )
 
     except Exception as e:
-        # Update job status to failed
+        print("❌ ERROR:", str(e))
+        print(traceback.format_exc())
         await jobs_collection.update_one(
             {"job_id": job_id},
             {"$set": {

@@ -10,6 +10,7 @@ import FormatSelector from './components/FormatSelector';
 import FormatButton from './components/FormatButton';
 import ResultSection from './components/ResultSection';
 import ProgressBar from './components/ProgressBar';
+import axios from 'axios';
 
 function App() {
   const { darkMode } = useTheme();
@@ -20,8 +21,9 @@ function App() {
   const [showApp, setShowApp] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [step, setStep] = useState(1);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [chats, setChats] = useState([]);
+const [sidebarOpen, setSidebarOpen] = useState(true);
+const [chats, setChats] = useState([]);
+const [downloadUrl, setDownloadUrl] = useState(null);
 
   const handleGetStarted = () => {
     setIsTransitioning(true);
@@ -41,7 +43,7 @@ function App() {
     setStep(3);
   };
 
-  const handleFormat = () => {
+const handleFormat = async () => {
     if (!file) {
       toast.error('Drop a PDF first, genius!');
       return;
@@ -50,10 +52,28 @@ function App() {
       toast.error('Pick a format before we roll!');
       return;
     }
+
     setLoading(true);
     setShowResult(false);
     toast.loading('AI is cooking your paper...', { id: 'formatting' });
-    setTimeout(() => {
+
+    try {
+      // Create form data
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('format_type', format);
+
+      // Call backend API
+      const response = await axios.post('http://localhost:8000/format', formData, {
+        responseType: 'blob',
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      // Create download link
+      // Create download URL
+const url = window.URL.createObjectURL(new Blob([response.data]));
+setDownloadUrl(url);
+
       setLoading(false);
       setShowResult(true);
       setStep(4);
@@ -61,17 +81,20 @@ function App() {
 
       // Add to recent chats
       const newChat = {
-  id: Date.now(),
-  name: file.name.replace('.pdf', ''),
-  format: format.includes('Journal') ? 'Journal' : format,
-  starred: false,
-  downloaded: false,
-  createdAt: Date.now(),
-};
-
+        id: Date.now(),
+        name: file.name.replace('.pdf', ''),
+        format: format.includes('Journal') ? 'Journal' : format,
+        starred: false,
+        downloaded: true,
+        createdAt: Date.now(),
+      };
       setChats(prev => [newChat, ...prev]);
 
-    }, 2000);
+    } catch (error) {
+      setLoading(false);
+      toast.error('Something went wrong! Please try again.', { id: 'formatting' });
+      console.error(error);
+    }
   };
 
   const handleSidebarToggle = (isOpen) => {
@@ -117,8 +140,12 @@ function App() {
             <FormatButton onClick={handleFormat} />
             {loading && <SkeletonLoader />}
             {showResult && (
-              <ResultSection file={file.name} format={format} />
-            )}
+  <ResultSection 
+    file={file.name} 
+    format={format}
+    downloadUrl={downloadUrl}
+  />
+)}
           </div>
 
         </div>
