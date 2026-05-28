@@ -1,12 +1,22 @@
+<div align="center">
+
 # 📄 R-Paper Formatter
 
-> AI-powered research paper formatter — convert your raw research paper PDF into IEEE, Springer, or any journal format instantly.
+### AI-powered Research Paper Formatter  
+Convert raw research paper PDFs into **IEEE, Springer, ACM, Elsevier, or custom journal formats** instantly using AI.
 
-![Status](https://img.shields.io/badge/Status-Under%20Development-yellow)
-![Frontend](https://img.shields.io/badge/Frontend-React.js-blue)
-![Backend](https://img.shields.io/badge/Backend-FastAPI-green)
-![AI](https://img.shields.io/badge/AI-Google%20Gemini-orange)
-![Database](https://img.shields.io/badge/Database-MongoDB-brightgreen)
+<br>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Under%20Development-yellow?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Frontend-React.js-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
+  <img src="https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" />
+  <img src="https://img.shields.io/badge/AI-Google%20Gemini-FF6F00?style=for-the-badge&logo=google&logoColor=white" />
+  <img src="https://img.shields.io/badge/Database-MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
+</p>
+
+</div>
+
 
 ---
 
