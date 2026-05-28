@@ -1,6 +1,6 @@
 # 📄 R-Paper Formatter
 
-> AI-powered research paper formatter — convert your raw PDF into IEEE, Springer, or any journal format instantly.
+> AI-powered research paper formatter — convert your raw research paper PDF into IEEE, Springer, or any journal format instantly.
 
 ![Status](https://img.shields.io/badge/Status-Under%20Development-yellow)
 ![Frontend](https://img.shields.io/badge/Frontend-React.js-blue)
