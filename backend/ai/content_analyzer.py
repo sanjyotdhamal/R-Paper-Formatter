@@ -2,12 +2,19 @@ from groq import Groq
 import json
 import os
 from dotenv import load_dotenv
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 
 load_dotenv()
 
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+api_key = os.getenv("GROQ_API_KEY")
+if not api_key:
+    raise ValueError("❌ GROQ_API_KEY not found in .env file!")
 
-async def analyze_content(raw_text: str) -> dict:
+client = Groq(api_key=api_key)
+
+def _call_groq_api(raw_text: str) -> dict:
+    """Synchronous function to call Groq API"""
     prompt = f"""
 You are an expert research paper analyzer. Your job is to carefully read the research paper text below and extract all sections accurately.
 
@@ -31,7 +38,7 @@ Extract these sections:
 - references: List of all references
 
 Research Paper Text:
-{raw_text[:8000]}
+{raw_text[:6000]}
 
 Return ONLY this JSON structure:
 {{
@@ -60,7 +67,7 @@ Return ONLY this JSON structure:
             }
         ],
         temperature=0.1,
-        max_tokens=6000,
+        max_tokens=4000,
     )
 
     response_text = response.choices[0].message.content.strip()
@@ -88,3 +95,9 @@ Return ONLY this JSON structure:
             "conclusion": "",
             "references": []
         }
+
+async def analyze_content(raw_text: str) -> dict:
+    """Async wrapper for Groq API call"""
+    loop = asyncio.get_event_loop()
+    with ThreadPoolExecutor() as executor:
+        return await loop.run_in_executor(executor, _call_groq_api, raw_text)
