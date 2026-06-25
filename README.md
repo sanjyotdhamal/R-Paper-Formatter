@@ -19,14 +19,16 @@ This project is currently **under active development**.
 | Frontend UI | ✅ Complete |
 | Backend API | ✅ Complete |
 | AI Integration | ✅ Complete |
-| Frontend-Backend Connection | ⏳ Pending |
+| Frontend-Backend Connection | ✅ Complete |
 | Deployment | ⏳ Pending |
 
 ---
 
-## 🎯 What It Does
+## 📸 Preview
 
-Upload your raw research paper as a PDF and instantly convert it to your desired format — whether for a **Conference** (IEEE, Springer) or any **Journal** — using the power of AI.
+**Simple 4-step process** — Upload → Select → AI Format → Download
+
+![R-Paper Formatter](assets/working.png)
 
 ---
 
