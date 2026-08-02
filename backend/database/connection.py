@@ -14,8 +14,8 @@ jobs_collection = database["jobs"]
 papers_collection = database["papers"]
 
 async def connect_db():
-    print("✅ Connected to MongoDB successfully!")
+    print("[OK] Connected to MongoDB successfully!")
 
 async def close_db():
     client.close()
-    print("🔴 MongoDB connection closed.")
+    print("[CLOSED] MongoDB connection closed.")

@@ -38,14 +38,32 @@ async def format_paper(
 ):
     job_id = str(uuid.uuid4())
 
+    # Normalize format_type for enum validation
+    # Frontend may send: "IEEE", "Springer", "Journal: Elsevier", "Journal: APA", etc.
+    raw_format = format_type.strip()
+    full_format_for_docx = raw_format.lower()  # Used for docx generation (keeps detail)
+
+    # Map to valid FormatType enum values
+    lower = raw_format.lower()
+    if lower.startswith("journal:"):
+        enum_format = FormatType.JOURNAL
+    elif "ieee" in lower:
+        enum_format = FormatType.IEEE
+    elif "springer" in lower:
+        enum_format = FormatType.SPRINGER
+    elif "elsevier" in lower:
+        enum_format = FormatType.ELSEVIER
+    else:
+        enum_format = FormatType.JOURNAL  # fallback for APA, MLA, etc.
+
     try:
         # Save job to MongoDB
         job = FormattingJob(
-    job_id=job_id,
-    original_filename=file.filename,
-    format_type=format_type.lower(),
-    status=JobStatus.PROCESSING
-)
+            job_id=job_id,
+            original_filename=file.filename,
+            format_type=enum_format,
+            status=JobStatus.PROCESSING
+        )
         await jobs_collection.insert_one(job.dict())
 
         # Step 1 — Extract text from PDF
@@ -65,8 +83,8 @@ async def format_paper(
         )
         await papers_collection.insert_one(paper.dict())
 
-        # Step 3 — Generate formatted DOCX
-        output_path = generate_docx(structured, format_type.lower(), job_id)
+        # Step 3 — Generate formatted DOCX (pass full format string for proper routing)
+        output_path = generate_docx(structured, full_format_for_docx, job_id)
 
         # Update job status
         await jobs_collection.update_one(
@@ -78,9 +96,10 @@ async def format_paper(
             }}
         )
 
+        safe_name = raw_format.replace(":", "-").replace(" ", "_")
         return FileResponse(
             output_path,
-            filename=f"formatted_{format_type}.docx",
+            filename=f"formatted_{safe_name}.docx",
             media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         )
 

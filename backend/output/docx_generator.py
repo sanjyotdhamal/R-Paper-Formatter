@@ -377,7 +377,7 @@ def generate_ieee(content: dict, job_id: str) -> str:
         ref_run = ref_heading.add_run(ref_cfg["heading"]["text"])
         set_font(ref_run, ref_cfg["heading"]["font"], ref_cfg["heading"]["size"],
                 bold=ref_cfg["heading"]["bold"])
-        set_paragraph_spacing(ref_heading, space_before=Pt(12))
+        set_paragraph_spacing(ref_heading, space_before=12)
 
         # References body
         if isinstance(references, list):
@@ -507,12 +507,20 @@ def generate_springer(content: dict, job_id: str) -> str:
 
 def generate_docx(structured_content: dict, format_type: str, job_id: str) -> str:
     """Main function to generate formatted DOCX documents"""
-    format_type = format_type.lower()
+    format_type = format_type.lower().strip()
 
-    if 'ieee' in format_type:
-        return generate_ieee(structured_content, job_id)
-    elif 'springer' in format_type:
+    if 'springer' in format_type:
         return generate_springer(structured_content, job_id)
+    elif 'ieee' in format_type:
+        return generate_ieee(structured_content, job_id)
+    elif format_type.startswith('journal:'):
+        # Extract journal name e.g. "journal: elsevier" -> "elsevier"
+        journal_name = format_type.split(':', 1)[1].strip()
+        if 'elsevier' in journal_name:
+            return generate_springer(structured_content, job_id)  # Elsevier uses Springer-like single-column
+        else:
+            # For APA, MLA, Nature, etc. - use IEEE-style academic formatting
+            return generate_ieee(structured_content, job_id)
     else:
         # Default to IEEE format
         return generate_ieee(structured_content, job_id)
